@@ -29,7 +29,8 @@ import software.amazon.awssdk.services.dynamodb.model.ProvisionedThroughput;
  */
 public class CreateDynamoDBTableOptions {
     private final DynamoDbClient dynamoDBClient;
-    private final ProvisionedThroughput provisionedThroughput;
+    private final Optional<ProvisionedThroughput> provisionedThroughput;
+    private final Optional<BillingMethod> billingMethod;
     private final String tableName;
     private final String partitionKeyName;
     private final Optional<String> sortKeyName;
@@ -37,7 +38,18 @@ public class CreateDynamoDBTableOptions {
     CreateDynamoDBTableOptions(final DynamoDbClient dynamoDBClient, final ProvisionedThroughput provisionedThroughput, final String tableName, final String partitionKeyName,
         final Optional<String> sortKeyName) {
         this.dynamoDBClient = dynamoDBClient;
-        this.provisionedThroughput = provisionedThroughput;
+        this.provisionedThroughput = Optional.of(provisionedThroughput);
+        this.billingMethod = Optional.empty();
+        this.tableName = tableName;
+        this.partitionKeyName = partitionKeyName;
+        this.sortKeyName = sortKeyName;
+    }
+    
+    CreateDynamoDBTableOptions(final DynamoDbClient dynamoDBClient, final BillingMethod billingMethod, final String tableName, final String partitionKeyName,
+        final Optional<String> sortKeyName) {
+        this.dynamoDBClient = dynamoDBClient;
+        this.provisionedThroughput = Optional.empty();
+        this.billingMethod = Optional.of(billingMethod);
         this.tableName = tableName;
         this.partitionKeyName = partitionKeyName;
         this.sortKeyName = sortKeyName;
