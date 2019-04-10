@@ -340,6 +340,7 @@ public class AmazonDynamoDBLockClient implements Runnable, Closeable {
         Objects.requireNonNull(createDynamoDBTableOptions.getDynamoDBClient(), "DynamoDB client object cannot be null");
         Objects.requireNonNull(createDynamoDBTableOptions.getTableName(), "Table name cannot be null");
         Objects.requireNonNull(createDynamoDBTableOptions.getProvisionedThroughput(), "Provisioned throughput cannot be null");
+        Objects.requireNonNull(createDynamoDBTableOptions.getBillingMethod(), "Billing method cannot be null");
         Objects.requireNonNull(createDynamoDBTableOptions.getPartitionKeyName(), "Hash Key Name cannot be null");
         Objects.requireNonNull(createDynamoDBTableOptions.getSortKeyName(), "Sort Key Name cannot be null");
         final KeySchemaElement partitionKeyElement = KeySchemaElement.builder()
@@ -370,7 +371,8 @@ public class AmazonDynamoDBLockClient implements Runnable, Closeable {
         final CreateTableRequest createTableRequest = CreateTableRequest.builder()
                 .tableName(createDynamoDBTableOptions.getTableName())
                 .keySchema(keySchema)
-                .provisionedThroughput(createDynamoDBTableOptions.getProvisionedThroughput())
+                .provisionedThroughput(createDynamoDBTableOptions.getProvisionedThroughput().orElse(null))
+                .billingMethod(createDynamoDBTableOptions.getBillingMethod().orElse(null))
                 .attributeDefinitions(attributeDefinitions)
                 .build();
 
